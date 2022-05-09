@@ -1,13 +1,15 @@
 import "./styles.scss";
 
+
+
 document.body.innerHTML = `
 <div class="wrapper">
   <h1>Virtual Keyboard</h1>
   <textarea readonly></textarea>
 
   <div class="keyboard">
-    <div class="row">
-      <div class="key">\`</div>
+    <div class="row shiftoff">
+      <div class="key backquote">\`</div>
       <div class="key">1</div>
       <div class="key">2</div>
       <div class="key">3</div>
@@ -18,11 +20,28 @@ document.body.innerHTML = `
       <div class="key">8</div>
       <div class="key">9</div>
       <div class="key">0</div>
-      <div class="key">-</div>
-      <div class="key">=</div>
+      <div class="key minus">-</div>
+      <div class="key equal">=</div>
       <div class="key_active backspace">BACKSPACE</div>
-      
    </div>
+   
+     <div class="row hiden">
+      <div class="key backquote">~</div>
+      <div class="key">!</div>
+      <div class="key">@</div>
+      <div class="key">#</div>
+      <div class="key">$</div>
+      <div class="key">%</div>
+      <div class="key">^</div>
+      <div class="key">&</div>
+      <div class="key">*</div>
+      <div class="key">(</div>
+      <div class="key">)</div>
+      <div class="key minus">_</div>
+      <div class="key equal">+</div>
+      <div class="key_active backspace">BACKSPACE</div>
+   </div>
+   
         <div class="row">     
       
 <div class="key_active tab">TAB</div>
@@ -36,10 +55,13 @@ document.body.innerHTML = `
       <div class="key">i</div>
       <div class="key">o</div>
       <div class="key">p</div>
-      <div class="key">[</div>  
-      <div class="key">]</div>
-      <div class="key slash">\\</div>
-      <div class="key_active">DEL</div>
+      <div class="key bracketleft shiftoff">[</div>  
+       <div class="key bracketleft hiden">{</div>  
+      <div class="key bracketright shiftoff">]</div>
+      <div class="key bracketleft hiden">}</div>  
+        <div class="key backslash shiftoff">\\</div>
+      <div class="key bracketleft hiden">|</div>  
+      <div class="key_active delete">DEL</div>
 
  
    </div>  
@@ -55,13 +77,15 @@ document.body.innerHTML = `
       <div class="key">j</div>
       <div class="key">k</div>
       <div class="key">l</div>
-      <div class="key">;</div>  
-      <div class="key">'</div>
+      <div class="key semicolon shiftoff">;</div>  
+        <div class="key semicolon hiden">:</div> 
+      <div class="key quote shiftoff">'</div>
+      <div class="key quote hiden">"</div>
       <div class="key_active enter">ENTER</div>
    </div>  
       
          <div class="row">
-      <div class="key_active shift">SHIFT</div> 
+      <div class="key_active shift shiftleft">SHIFT</div> 
       <div class="key">z</div>
       <div class="key">x</div>
       <div class="key">c</div>
@@ -69,30 +93,35 @@ document.body.innerHTML = `
       <div class="key">b</div>
       <div class="key">n</div>
       <div class="key">m</div>
-      <div class="key">,</div>
-      <div class="key">.</div>
-      <div class="key">/</div>  
+      <div class="key comma shiftoff">,</div>
+      <div class="key comma hiden"><</div>
+      <div class="key period shiftoff">.</div>
+       <div class="key period hiden">></div>
+      <div class="key slash shiftoff">/</div>  
+      <div class="key slash hiden">?</div> 
       <div class="key up">↑</div>
-      <div class="key_active shift">SHIFT</div>
+      <div class="key_active shift shiftright">SHIFT</div>
    </div>  
 
         <div class='row'>
-      <div class="key_active ctr">CTR</div> 
+      <div class="key_active ctr controlleft">CTR</div> 
       <div class="key_active">LIN</div>
-      <div class="key_active">ALT</div>
+      <div class="key_active altleft">ALT</div>
       <div class="key space"></div>
-      <div class="key_active">ALT</div>
+      <div class="key_active altright">ALT</div>
       <div class="key left">←</div>
       <div class="key down">↓</div>
       <div class="key right">→</div>
-      <div class="key_active">CTR</div>
+      <div class="key_active controlright">CTR</div>
       
    </div>  
     <div class='os'> Produced in Ubuntu OS</div>
   <div>
         
       `;
+
 let lockSwitch = 1;
+
 const TAB = document.querySelector(".tab");
 let text = document.querySelector("textarea");
 let key = document.querySelectorAll(".key");
@@ -124,6 +153,21 @@ document.addEventListener("keydown", function(event) {
   
 });
 
+function sh(){
+    if ( lockSwitch === 0 ) {
+    key.forEach( value => value.innerHTML = value.innerHTML.toLowerCase() );
+    lockSwitch =1;
+    
+}
+    
+  else if ( lockSwitch === 1 )  {
+    key.forEach( value => value.innerHTML = value.innerHTML.toUpperCase() );
+    lockSwitch =0;
+   
+    
+    }     
+}
+
 function caps(){
   if ( lockSwitch === 0 ) {
     key.forEach( value => value.innerHTML = value.innerHTML.toLowerCase() );
@@ -146,7 +190,7 @@ function blink(val){
 
 
 document.addEventListener("keydown", function(e) {
-  
+
   if ( e.code == "Tab" 
       || e.code == "Space"
       || e.code == "ArrowUp"
@@ -186,11 +230,29 @@ blink(enter);
   blink(TAB);
   }
   
+  
         if ( event.code.match(/Arrow/) ) {
   
 text.innerHTML += document.querySelector("." + event.code.slice(5).toLowerCase() ).innerHTML;
   blink( document.querySelector("." + event.code.slice(5).toLowerCase() ) );
   }
+  
+         if ( event.code.match(/lash/)
+            || event.code.match(/Bracket/)
+            || event.code.match(/Period/) 
+            || event.code.match(/Semicolon/) 
+            || event.code.match(/uote/)
+            || event.code.match(/Minus/) 
+            || event.code.match(/Equal/) ) {
+  
+text.innerHTML += document.querySelector("." + event.code.toLowerCase() ).innerHTML;
+  blink( document.querySelector("." + event.code.toLowerCase() ) );
+  }
+  
+     if ( event.code.match(/Control/) || event.code.match(/Alt/) ) {
+  blink( document.querySelector("." + event.code.toLowerCase() ) );
+  }
+  
   
 }
    );
@@ -201,3 +263,35 @@ backspace.addEventListener( "click", () => {text.innerHTML = text.innerHTML.slic
     } );
 TAB.addEventListener( "click", () => text.innerHTML += "  " );
 
+
+
+document.addEventListener("keydown", (event) => {
+  if ( event.code.match( /hift/ ) ) {
+   
+       document.querySelectorAll(".hiden").forEach( (value) => {value.classList.toggle("new");} );
+   document.querySelectorAll(".hiden").forEach( (value) => {value.classList.toggle("hiden");});
+      document.querySelectorAll(".shiftoff").forEach( (value) => {value.classList.toggle("hiden");} );
+   document.querySelectorAll(".shiftoff").forEach( (value) => {value.classList.toggle("shiftoff");});
+    
+    
+    
+    sh();
+document.querySelector("."+event.code.toLowerCase()).style.backgroundColor = "grey";
+  }
+});
+
+document.addEventListener("keyup", (event) => {
+  if (event.code.match( /hift/) ){
+       document.querySelectorAll(".hiden").forEach( (value) => {value.classList.toggle("shiftoff");});
+   document.querySelectorAll(".new").forEach( (value) => {value.classList.toggle("hiden");} );
+
+      document.querySelectorAll(".shiftoff").forEach( (value) => {value.classList.toggle("hiden");} );
+   document.querySelectorAll(".new").forEach( (value) => {value.classList.toggle("new");}) ;
+  
+  
+sh();
+document.querySelector("."+event.code.toLowerCase()).style.backgroundColor = "";
+  }
+});
+
+    
